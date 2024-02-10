@@ -25,6 +25,51 @@ function App() {
   const [squareBeingReplaced, setSquareBeingReplaced] = useState(null);
   const [scoreDisplay, setScoreDisplay] = useState(0);
 
+  const checkForColumnOfFive = () => {
+    for (let i = 0; i <= 31; i++) {
+      const columnOfFive = [i, i + width, i + width * 2, i + width * 3, i + width * 4];
+      const decidedColor = currentColorArrangement[i];
+      const isBlank = currentColorArrangement[i] === blank;
+      if (
+        columnOfFive.every(
+          (square) =>
+            currentColorArrangement[square] === decidedColor && !isBlank
+        )
+      ) {
+        setScoreDisplay((score) => score + 5);
+        columnOfFive.forEach(
+          (square) => (currentColorArrangement[square] = blank)
+        );
+        return true;
+      }
+    }
+  };
+  const checkForRowOfFive = () => {
+    for (let i = 0; i < 64; i++) {
+      const rowOfFive = [i, i + 1, i + 2, i + 3, i + 4];
+      const decidedColor = currentColorArrangement[i];
+      const notValid = [
+        4, 5, 6, 7, 12, 13, 14, 15, 20, 21, 22, 23, 28, 29, 30, 31, 36, 37, 38, 39, 44, 45, 46, 47, 52, 53,
+        54, 55, 61, 62, 63, 64,
+      ];
+      const isBlank = currentColorArrangement[i] === blank;
+
+      if (notValid.includes(i)) continue;
+
+      if (
+        rowOfFive.every(
+          (square) =>
+            currentColorArrangement[square] === decidedColor && !isBlank
+        )
+      ) {
+        setScoreDisplay((score) => score + 5);
+        rowOfFive.forEach(
+          (square) => (currentColorArrangement[square] = blank)
+        );
+        return true;
+      }
+    }
+  };
   const checkForColumnOfFour = () => {
     for (let i = 0; i <= 39; i++) {
       const columnOfFour = [i, i + width, i + width * 2, i + width * 3];
@@ -165,6 +210,8 @@ function App() {
     ];
     const validMove = validMoves.includes(squareBeingReplacedId);
 
+    const isAColumnOfFive = checkForColumnOfFive();
+    const isARowOfFive = checkForRowOfFive();
     const isAColumnOfFour = checkForColumnOfFour();
     const isARowOfFour = checkForRowOfFour();
     const isAColumnOfThree = checkForColumnOfThree();
@@ -173,7 +220,7 @@ function App() {
     if (
       squareBeingReplacedId &&
       validMove &&
-      (isAColumnOfFour || isARowOfFour || isAColumnOfThree || isARowOfThree)
+      (isAColumnOfFive || isARowOfFive || isAColumnOfFour || isARowOfFour || isAColumnOfThree || isARowOfThree)
     ) {
       setSquareBeingDragged(null);
       setSquareBeingReplaced(null);
@@ -202,6 +249,8 @@ function App() {
 
   useEffect(() => {
     const timer = setInterval(() => {
+      checkForColumnOfFive();
+      checkForRowOfFive();
       checkForColumnOfFour();
       checkForRowOfFour();
       checkForColumnOfThree();
@@ -211,6 +260,8 @@ function App() {
     }, 100);
     return () => clearInterval(timer);
   }, [
+    checkForColumnOfFive,
+    checkForRowOfFive,
     checkForColumnOfFour,
     checkForRowOfFour,
     checkForColumnOfThree,
