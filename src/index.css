@@ -1,5 +1,8 @@
 .app {
   display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
   padding: 30px;
 }
 .game {
@@ -7,8 +10,31 @@
   height: 560px;
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
 }
-.game img{
+.game img {
   width: 70px;
   height: 70px;
+}
+@media (max-width: 768px) {
+  .game {
+    width: 440px;
+    height: 440px;
+  }
+  .game img {
+    width: 55px;
+    height: 55px;
+  }
+}
+@media (max-width: 480px) {
+  .game {
+    width: 360px;
+    height: 360px;
+  }
+  .game img {
+    width: 45px;
+    height: 45px;
+  }
 }
