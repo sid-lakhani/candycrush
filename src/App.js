@@ -142,6 +142,9 @@ function App() {
   };
 
   const dragEnd = (e) => {
+    if (!squareBeingReplaced || !squareBeingDragged) {
+      return;
+    }
     const squareBeingReplacedId = parseInt(
       squareBeingReplaced.getAttribute("data-id")
     );
@@ -219,6 +222,9 @@ function App() {
 
   return (
     <div className="app">
+      <div className="scoreboard">
+        <ScoreBoard score={scoreDisplay} />
+      </div>
       <div className="game">
         {currentColorArrangement.map((candyColor, index) => (
           <img
@@ -236,7 +242,6 @@ function App() {
           />
         ))}
       </div>
-      <ScoreBoard score={scoreDisplay} />
     </div>
   );
 }
